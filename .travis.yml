@@ -15,7 +15,7 @@ after_success:
   - docker build -t gotham237/multi-server ./server
   - docker build -t gotham237/multi-worker ./worker
   # Log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
+  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_ID" --password-stdin 
   # take those images and push the to docker hub
   - docker push gotham237/multi-client
   - docker push gotham237/multi-nginx

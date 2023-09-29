@@ -1,0 +1,25 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t gotham237/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true gotham237/react-test npm test
+
+after_success:
+  - docker build -t gotham237/multi-client ./client
+  - docker build -t gotham237/multi-nginx ./nginx
+  - docker build -t gotham237/multi-server ./server
+  - docker build -t gotham237/multi-worker ./worker
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
+  # take those images and push the to docker hub
+  - docker push gotham237/multi-client
+  - docker push gotham237/multi-nginx
+  - docker push gotham237/multi-server
+  - docker push gotham237/multi-worker
+
+
